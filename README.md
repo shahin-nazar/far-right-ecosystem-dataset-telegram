@@ -1,4 +1,4 @@
-# Far-right Telegram Data
+# The Far-Right Telegram Ecosystem Dataset (1025 Channels, 5.7M+ Posts)
 
 This repository contains public Telegram data of 1025 far-right groups used to apply BERT-based topic modeling. The dataset contains over 5.7 million posts posted between 2019-2024. 
 
@@ -13,7 +13,7 @@ The repository is organized into several directories containing various componen
 - docs/: Contains: a CSV file with all channel names of the dataset, a CSV file with Active Club channel names used to filter dataset and process with BERTopic.
 - figures/: Contains figures used in the associated paper in JPG format.
 - model-output/: Contains the output of the topic model in CSV format, including topic labels and related data.
-- ./: For reproducability of the associated paper: run-model.py runs BERTopic on the data in /data and stores the output in /ouput.
+- ./: For easy exploration of the dataset's themes or reproducability of the associated paper: run-model.py runs BERTopic on a specific subset of channels in the data in /data and stores the output in /ouput.
 
 ## Dataset
 
@@ -96,11 +96,11 @@ If you use this dataset or model in your research, please cite the following:
 
 ```bibtex
 @misc{yourusername2026,
-  author = {Shahin Nazar, Abigail Nieves Delgado, Toine Pieters, Thomas Jorna},
-  title = {"Resisting The Great Replacement of White Men Through Neo-Nazi Fitness"},
+  author = {Shahin Nazar, Thomas Jorna, Abigail Nieves Delgado, Toine Pieters},
+  title = {"The Far-Right Ecosystem Dataset"},
   year = {2026},
   publisher = {Zenodo},
-  doi = {10.5281/zenodo.1234567},
+  doi = {10.5281/zenodo.18633028 },
   url = {https://zenodo.org/record/1234567}
 }
 ```
