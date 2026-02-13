@@ -9,13 +9,15 @@ import re
 from bertopic import BERTopic
 
 clubnames = r"./docs/network-channel-names.csv"
+print(r"Reading clubnames...")
 clubnames_df = pd.read_csv(clubnames)
 clubnames_list = clubnames_df["clubname"].dropna().tolist()
 
 docs = []
 
-for dataset in datasets_chunked:
+for dataset, idx in x in enumerate(datasets_chunked):
     try:
+        print(r"Processing dataset {idx}")
         # read file in chunks to avoid memory issues
         df_iter = pd.read_csv(dataset, usecols=["channel_name", "cleaned_message"], 
                               sep=None, engine="python", encoding="utf-8", chunksize=10000)
@@ -72,7 +74,7 @@ print("Topics length:", len(topics))
 print("Model topics_ length:", len(topic_model.topics_))
 
 df = pd.DataFrame({"topic": topics, "document": docs})
-df
+
 
 save_path_df = "./output"
 df.to_csv(save_path_df, index=False, encoding="utf-8")
