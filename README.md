@@ -1,43 +1,34 @@
 # BERTopic Modelling on Telegram Data
 
-This repository contains data and models used to apply **BERT-based topic modeling** on **Telegram** datasets. The repo includes processed data, BERT model outputs, figures, and other materials used in the analysis and paper.
+This repository contains public Telegram data of 1025 far-right groups used to apply BERT-based topic modeling. The dataset contains over 3 million posts posted between 2019-2024. 
+
+The repo includes processed data, BERT model outputs, figures, and other materials used in the corresponding paper (to be published).
 
 The repository is organized into several directories containing various components of the project. Below is a detailed description of the repository structure, usage, and how to cite this work.
 
 ## Repository Structure
 
-- **additional-figures/**: Contains visualizations of the model's output in HTML format, used to guide research.
-- **data/**: Contains the processed data, which includes chunked-up CSV files ready for analysis.
-- **docs/**: Contains: a text file with parameters and settings used in the BERT model for topic modeling, a CSV file with all channel names of the dataset, a CSV file with Active Club channel names used to filter dataset and process with BERTopic, a TXT file of the code used. 
-- **figures/**: Contains figures used in the associated paper (e.g., topic visualizations, charts) in JPG format.
-- **model-output/**: Contains the results of the topic modeling in CSV format, including topic labels and related data.
-
-## Project Overview
-
-The goal of this project is to perform topic modeling on a set of **Telegram data** using **BERT-based models**. The dataset was preprocessed, chunked into manageable parts, and then passed through a **BERT model** for topic extraction. The results are stored as CSV files and visualized through various figures and plots as a visual guide for research.
-
-The repository contains all necessary data and figures to reproduce the work done in the associated research paper.
+- additional-figures/: Contains visualizations of the model's output in HTML format, used to guide research.
+- data/: Contains the processed data, which includes chunked-up CSV files ready for analysis.
+- docs/: Contains: a CSV file with all channel names of the dataset, a CSV file with Active Club channel names used to filter dataset and process with BERTopic.
+- figures/: Contains figures used in the associated paper in JPG format.
+- model-output/: Contains the output of the topic model in CSV format, including topic labels and related data.
+- ./: For reproducability of the associated paper: run-model.py runs BERTopic on the data in /data and stores the output in /ouput.
 
 ## Dataset
 
-The dataset used in this project is obtained from **public Telegram channels** and **groups**. The data consists of messages and interactions, which were preprocessed into CSV format. 
+The dataset used in this project is obtained from public Telegram channels and groups. The data consists of messages and interactions, which were processed into CSV format. 
 
 ### Data Description:
 
-- The **processed data** is stored in the `data/` directory. It includes multiple CSV files that have been chunked to fit into BERT-based topic models.
+- The processed data is stored in the `data/` directory. It includes multiple CSV files that have been chunked to fit into BERT-based topic models.
 - Each CSV file contains columns for message text, date, user (if available), and metadata.
   
-We ensured respect for Telegram's [Terms of Service](https://telegram.org/tos) and **data privacy** laws (e.g., GDPR, CCPA) when working with this dataset.
-
-### Prerequisites
-
-- Python 3.8 or higher
-- Required libraries (listed in `requirements.txt`)
-- A BERT model for topic modeling
+We ensured respect for Telegram's [Terms of Service](https://telegram.org/tos) and data privacy laws (e.g., GDPR, CCPA) when working with this dataset.
 
 ### Model Settings
 
-The **BERT-based topic modeling** pipeline includes the following settings:
+The BERT-based topic modeling pipeline includes the following settings:
 
 1. **CountVectorizer**:
     - **stop_words**: 'english' (removes common English stopwords)
@@ -85,11 +76,11 @@ The visualizations of the BERT model's output, including topic distributions and
 
 # Data Privacy and Anonymization
 
-This dataset contains **public data** scraped from **public Telegram channels and groups**. While all content in the dataset is publicly available, it **may contain personal information**, including **email addresses** or **contact information** that users have voluntarily shared in their public posts.
+This dataset contains public data scraped from public Telegram channels and groups. While all content in the dataset is publicly available, it may contain personal information, including email addresses or contact information that users have voluntarily shared in their public posts.
 
-In accordance with privacy best practices, we have done our best to **anonymize** the dataset by removing or replacing sensitive information (e.g., email addresses). However, please note that users' **publicly shared content** is still present and that we may have missed something.
+In accordance with privacy best practices, we have done our best to anonymize the dataset by removing or replacing sensitive information (e.g., email addresses). However, please note that users' publicly shared content is still present and that we may have missed something.
 
-**Disclaimer**: No private conversations or data from private groups have been included in this dataset. The data is sourced only from **publicly accessible Telegram groups/channels**.
+Disclaimer: No private conversations or data from private groups have been included in this dataset. The data is sourced only from publicly accessible Telegram groups/channels.
 
 By using this dataset, you agree to respect the privacy of individuals and adhere to the relevant privacy laws and regulations.
 
@@ -97,7 +88,7 @@ By using this dataset, you agree to respect the privacy of individuals and adher
 
 This repository is licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0).
 
-The dataset is obtained from public Telegram channels and groups. While we provide the data in this repository, please ensure you follow **Telegram's Terms of Service** and **data privacy laws** when using this dataset.
+The dataset is obtained from public Telegram channels and groups. While we provide the data in this repository, please ensure you follow Telegram's Terms of Service and data privacy laws when using this dataset.
 
 ## Citation
 
