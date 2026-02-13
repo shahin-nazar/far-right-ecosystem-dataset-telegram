@@ -69,11 +69,11 @@ The **BERT-based topic modeling** pipeline includes the following settings:
     - **min_dist**: 0.0 (controls how tightly UMAP packs points together)
     - **metric**: 'cosine' (distance metric for UMAP)
 
-```python
-
 # Example of reduced embeddings visualization
 
+```python
 reduced_embeddings = UMAP(n_neighbors=10, n_components=2, min_dist=0.0, metric='cosine').fit_transform(embeddings)
+```
 
 ## Results
 
@@ -103,6 +103,7 @@ The dataset is obtained from public Telegram channels and groups. While we provi
 
 If you use this dataset or model in your research, please cite the following:
 
+```bibtex
 @misc{yourusername2026,
   author = {Shahin Nazar, Abigail Nieves Delgado, Toine Pieters},
   title = {"Resisting The Great Replacement of White Men Through Neo-Nazi Fitness"},
@@ -111,3 +112,4 @@ If you use this dataset or model in your research, please cite the following:
   doi = {10.5281/zenodo.1234567},
   url = {https://zenodo.org/record/1234567}
 }
+```
