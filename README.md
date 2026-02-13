@@ -100,7 +100,7 @@ If you use this dataset or model in your research, please cite the following:
   title = {"The Far-Right Ecosystem Dataset"},
   year = {2026},
   publisher = {Zenodo},
-  doi = {10.5281/zenodo.18633028 },
-  url = {https://zenodo.org/record/1234567}
+  doi = {10.5281/zenodo.18633028},
+  url = {https://zenodo.org/records/18633028}
 }
 ```
