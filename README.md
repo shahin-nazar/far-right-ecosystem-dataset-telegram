@@ -35,6 +35,12 @@ uv run run-model.py
 
 On the first run, `uv` will download the correct Python version and install all required packages. Subsequent runs reuse the cached environment. Output files are written to `output/`.
 
+The script caches processed documents and embeddings in `.cache/` to avoid recomputing them on subsequent runs. To force a fresh run (e.g., if you changed the input data), use:
+
+```bash
+uv run run-model.py --no-cache
+```
+
 ### Running the notebook
 
 If you prefer a notebook, `run-model.ipynb` contains the same code split into cells. To open it:
