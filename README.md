@@ -10,12 +10,12 @@ The repository is organized into several directories containing various componen
 
 ## Repository Structure
 
-- additional-figures/: Contains visualizations of the model's output in HTML format, used to guide research.
-- data/: Contains the processed data, which includes chunked-up CSV files ready for analysis.
-- docs/: Contains: a CSV file with all channel names of the dataset, a CSV file with Active Club channel names used to filter dataset and process with BERTopic.
-- figures/: Contains figures used in the associated paper in JPG format.
-- model-output/: Contains the output of the topic model in CSV format, including topic labels and related data.
-- ./: For easy exploration of the dataset's themes or reproducability of the associated paper: run-model.py runs BERTopic on a specific subset of channels in the data in /data and stores the output in /ouput.
+- `./`: For easy exploration of the dataset's themes or reproducability of the associated paper: run-model.py runs BERTopic on a specific subset of channels in the data in `/data` and stores the output in `/output`.
+- `additional-figures/`: Contains visualizations of the model's output in HTML format, used to guide research.
+- `data/`: Contains the processed data, which includes chunked-up CSV files ready for analysis.
+- `docs/`: Contains: a CSV file with all channel names of the dataset, a CSV file with Active Club channel names used to filter dataset and process with BERTopic.
+- `figures/`: Contains figures used in the associated paper in JPG format.
+- `model-output/`: Contains the output of the topic model in CSV format, including topic labels and related data.
 
 ## Running the Model
 
@@ -45,7 +45,12 @@ uv run run-model.py --no-cache
 
 The dataset used in this project is obtained from public Telegram channels and groups. The data consists of messages and interactions, which were processed into CSV format.
 
-Includes a broad array of far-right movements and groups such as: white supremacists, ultranationalists, identitarians, neo-Nazis, esoteric Nazism, Christian Nationalists, accelerationists of different colors, great replacement thinking and other conspiracy theories, militias, other vaguely defined extremists, and many more. Also includes contemporary movements such as the Active Clubs, Patriot Front, Atomwaffen related groups, Oath Keepers, Nordic Resistance Movement, Patriotic Alternative, Patriot Movement, and, indeed, many more.
+Includes a broad array of far-right movements and groups such as:
+
+- White supremacists, ultranationalists, identitarians, neo-Nazis, esoteric Nazism, Christian Nationalists, accelerationists of different colors, great replacement thinking and other conspiracy theories, militias, other vaguely defined extremists, and many more.
+- Also includes contemporary movements such as the Active Clubs, Patriot Front, Atomwaffen related groups, Oath Keepers, Nordic Resistance Movement, Patriotic Alternative, Patriot Movement, and, indeed, many more.
+- Thinktanks such as the The Heritage Foundation and White Paper Institute.
+- Right-wing influencers such as
 
 Post-level data and various fields including: channel ID's, channel names, message ID's, message texts, engagement metrics (views, number of replies, etc.), forwards, message links, media type contained, domain, url, and about a dozen more fields.
 
@@ -53,8 +58,57 @@ The data was obtained via the Telegram API using iterative snowball sampling for
 
 ### Data Description:
 
-- The processed data is stored in the `data/` directory. It includes multiple CSV files that have been chunked to fit into BERT-based topic models.
-- Each CSV file contains columns for message text, date, user (if available), and metadata.
+- The processed data is stored in the `data/` directory. It includes 571 CSV files each with 10,000 rows that have been chunked to fit into BERT-based topic models. The data is preprocessed and thus easily parseable with Pandas.
+- Each row is a post and contains the following fields/colums:
+  - `signature`
+  - `channel_id`
+  - `channel_name`
+  - `msg_id`
+  - `message`
+  - `cleaned_message`
+  - `date`
+  - `msg_link`
+  - `msg_from_peer`
+  - `msg_from_id`
+  - `views`
+  - `number_replies`
+  - `number_forwards`
+  - `is_forward`
+  - `forward_msg_from_peer_type`
+  - `forward_msg_from_peer_id`
+  - `forward_msg_from_peer_name`
+  - `forward_msg_date`
+  - `forward_msg_date_string`
+  - `forward_msg_link`
+  - `is_reply`
+  - `reply_to_msg_id`
+  - `reply_msg_link`
+  - `contains_media`
+  - `media_type`
+  - `has_url`
+  - `url`
+  - `domain`
+  - `url_title`
+  - `url_description`
+  - `document_type`
+  - `document_id`
+  - `document_video_duration`
+  - `document_filename`
+  - `poll_id`
+  - `poll_question`
+  - `poll_total_voters`
+  - `poll_results`
+  - `contact_phone_number`
+  - `contact_name`
+  - `contact_userid`
+  - `geo_type`
+  - `lat`
+  - `lng`
+  - `venue_id`
+  - `venue_type`
+  - `venue_title`
+  - `venue_address`
+  - `venue_provider`
 
 We ensured respect for Telegram's [Terms of Service](https://telegram.org/tos) and data privacy laws (e.g., GDPR, CCPA) when working with this dataset.
 
