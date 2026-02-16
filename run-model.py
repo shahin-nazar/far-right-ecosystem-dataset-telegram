@@ -30,7 +30,6 @@ from natsort import natsorted
 def log(message):
     print(f">>> {message}")
 
-
 CACHE_DIR = Path(".cache")
 DOCS_CACHE = CACHE_DIR / "docs.joblib"
 EMBEDDINGS_CACHE = CACHE_DIR / "embeddings.joblib"
@@ -137,7 +136,6 @@ log("Loading dependencies...")
 from bertopic import BERTopic
 from sentence_transformers import SentenceTransformer
 from umap import UMAP
-from hdbscan import HDBSCAN
 from sklearn.feature_extraction.text import CountVectorizer
 log("Dependencies loaded.")
 
@@ -155,7 +153,6 @@ topic_model = BERTopic(
     vectorizer_model=vectorizer_model,
     top_n_words=5,
     verbose=True,
-
 )
 
 topics, probs = topic_model.fit_transform(docs, embeddings)
@@ -181,5 +178,37 @@ topic_info = topic_model.get_topic_info()
 save_path_topics = "./output/topic-info.csv"
 topic_info.to_csv(save_path_topics, index=False, encoding="utf-8")
 log(f"Topic info saved to {save_path_topics}")
+
+log("Start visualizing top 100 topics")
+# Visualize topics
+fig = topic_model.visualize_topics(topics = list(range(0, 100)))
+fig.write_html("./output/visualized_topics.html")
+fig.write_image("./output/visualized_topics.png")
+log("Finished visualizing top 100 topics")
+
+log("Generating barchart of top 100 topics")
+# Generate barchart of top keywords
+figbar = topic_model.visualize_barchart(list(range(0, 100)))
+figbar.write_html("./output/barchart.html")
+figbar.write_image("./output/barchart.png")
+log("Finished generating barchart of top 100 topics")
+
+log("Generating hierarchical clustering map of top 100 topics")
+# Generate hierarchical clustering map
+hierarchy = topic_model.visualize_hierarchy(orientation="left", top_n_topics=100)
+hierarchy.write_html("./output/visualized_hierarchy.html")
+hierarchy.write_image("./output/visualized_hierarchy.png")
+log("Finished generating hierarchical clustering map of top 100 topics")
+
+log("Generating document map of top 100 topics")
+# Generate document map visualization
+fig = topic_model.visualize_documents(
+    docs=docs,
+    reduced_embeddings=reduced_embeddings,
+    topics=list(range(0, 100))
+)
+fig.write_image("./output/visualization_map.png")
+fig.write_html("./output/visualization_map.html")
+log("Finished generating document map of top 100 topics")
 
 log("Done.")

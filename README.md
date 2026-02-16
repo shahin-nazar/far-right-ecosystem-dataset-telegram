@@ -11,11 +11,9 @@ The repository is organized into several directories containing various componen
 ## Repository Structure
 
 - `./`: For easy exploration of the dataset's themes or reproducability of the associated paper: run-model.py runs BERTopic on a specific subset of channels in the data in `/data` and stores the output in `/output`.
-- `additional-figures/`: Contains visualizations of the model's output in HTML format, used to guide research.
 - `data/`: Contains the processed data, which includes chunked-up CSV files ready for analysis.
 - `docs/`: Contains: a CSV file with all channel names of the dataset, a CSV file with Active Club channel names used to filter dataset and process with BERTopic.
-- `figures/`: Contains figures used in the associated paper in JPG format.
-- `model-output/`: Contains the output of the topic model in CSV format, including topic labels and related data.
+- `model-output/`: Contains the output of the topic model in CSV format, including a few example visualizations of the output.
 
 ## Running the Model
 
@@ -43,12 +41,12 @@ uv run run-model.py --no-cache
 
 ## Dataset
 
-The dataset used in this project is obtained from public Telegram channels and groups.
+The dataset used in this project is obtained from public Telegram channels and groups and consists of messages and interactions, which were processed into CSV format.
+
 This data was collected using [telegram-tracker](https://github.com/estebanpdl/telegram-tracker).
-The data consists of messages and interactions, which were processed into CSV format.
 
 Includes a broad array of far-right movements and groups such as: 
-- White supremacists, ultranationalists, identitarians, neo-Nazis, esoteric Nazism, Christian Nationalists, accelerationists of different colors, great replacement thinking and other conspiracy theories, militias, other vaguely defined extremists, ecofascists, tradwives, and many more. 
+- White supremacists, ultranationalists, identitarians, neo-Nazis, esoteric Nazism, Christian Nationalists, accelerationists of different colors, great replacement thinking and other conspiracy theories, militias, ecofascists, tradwives, and many more. 
 - Also includes contemporary movements such as the Active Clubs, Atomwaffen related groups, Junge Nationalisaten, Patriot Front, Oath Keepers, Nordic Resistance Movement, Patriotic Alternative, Patriot Movement, and, indeed, many more.
 - Thinktanks such as the White Papers Institute.
 - Right-wing influencers and platforms such as Red Ice TV, Joel Davis, MEDIA2RISE, etc.
@@ -123,21 +121,14 @@ The BERT-based topic modeling pipeline includes the following settings:
    - **min_df**: 2 (ignores terms that appear in fewer than 2 documents)
    - **ngram_range**: (1, 2) (uses unigrams and bigrams)
 
-2. **HDBSCAN** (for clustering topics):
-
-   - **min_cluster_size**: 150 (minimum size of each cluster)
-   - **metric**: 'euclidean' (distance metric for clustering)
-   - **cluster_selection_method**: 'eom' (used for selecting clusters)
-   - **prediction_data**: True (enables prediction on new data)
-
-3. **UMAP** (for dimensionality reduction):
+2. **UMAP** (for dimensionality reduction):
 
    - **n_neighbors**: 15 (number of neighboring points used for manifold approximation)
    - **n_components**: 5 (reduces the data to 5 components for the clustering)
    - **min_dist**: 0.0 (controls how tightly UMAP packs points together)
    - **metric**: 'cosine' (distance metric for UMAP)
 
-4. **BERTopic** (the main topic model):
+3. **BERTopic** (the main topic model):
 
    - **embedding_model**: Your BERT embedding model (e.g., `bert-base-uncased`)
    - **umap_model**: UMAP model used for dimensionality reduction
@@ -145,7 +136,7 @@ The BERT-based topic modeling pipeline includes the following settings:
    - **top_n_words**: 20 (number of top words to display for each topic)
    - **verbose**: True (provides detailed output during the topic modeling process)
 
-5. **UMAP for Reduced Embeddings**:
+4. **UMAP for Reduced Embeddings**:
    - **n_neighbors**: 10 (number of neighboring points for the reduced space)
    - **n_components**: 2 (reduces the embeddings to 2 components for visualization)
    - **min_dist**: 0.0 (controls how tightly UMAP packs points together)
