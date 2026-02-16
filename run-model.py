@@ -8,10 +8,13 @@
 # ///
 
 import os
-# disable all parallel backends to prevent libomp/numba segfaults on macOS ARM64
-os.environ["LOKY_MAX_CPU_COUNT"] = "1"
-os.environ["OMP_NUM_THREADS"] = "1"
-os.environ["NUMBA_NUM_THREADS"] = "1"
+import sys
+
+# loky/numba parallelism causes resource tracker errors on macOS
+if sys.platform == "darwin":
+    os.environ["LOKY_MAX_CPU_COUNT"] = "1"
+    os.environ["OMP_NUM_THREADS"] = "1"
+    os.environ["NUMBA_NUM_THREADS"] = "1"
 
 import re
 import glob
@@ -44,7 +47,7 @@ use_cache = not args.no_cache
 # check for cached data
 cached_data = None
 if not use_cache:
-    log(f"Cache disabled via --no-cache flag.")
+    log("Cache disabled via --no-cache flag.")
 elif not DOCS_CACHE.exists() or not EMBEDDINGS_CACHE.exists():
     log(f"No cache found in {CACHE_DIR}/")
 else:
@@ -68,7 +71,7 @@ if cached_data is None:
 
     channelnames = []
 
-    log(f"Collecting channel names from data files...")
+    log("Collecting channel names from data files...")
     for file in datasets_chunked:
         df = pd.read_csv(file, usecols=["channel_name"])
         channelnames.extend(df["channel_name"].dropna().unique())
@@ -85,7 +88,7 @@ if cached_data is None:
     docs = []
     unique_docs = set()
 
-    log(f"Filtering and deduplicating documents...")
+    log("Filtering and deduplicating documents...")
     total = len(datasets_chunked)
     for i, dataset in enumerate(datasets_chunked, 1):
         log(f"  [{i}/{total}] {os.path.basename(dataset)}")
@@ -111,12 +114,12 @@ if cached_data is None:
     # compute embeddings
     from sentence_transformers import SentenceTransformer
 
-    log(f"Loading embedding model (paraphrase-multilingual-MiniLM-L12-v2)...")
+    log("Loading embedding model (paraphrase-multilingual-MiniLM-L12-v2)...")
     embedding_model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
 
     log(f"Encoding {len(docs)} documents (this may take a while)...")
     embeddings = embedding_model.encode(docs, show_progress_bar=True)
-    log(f"Encoding complete.")
+    log("Encoding complete.")
 
     # save cache
     CACHE_DIR.mkdir(exist_ok=True)
@@ -124,7 +127,7 @@ if cached_data is None:
     joblib.dump(docs, DOCS_CACHE)
     log(f"Saving embeddings to {EMBEDDINGS_CACHE}...")
     joblib.dump(embeddings, EMBEDDINGS_CACHE)
-    log(f"Cache saved.")
+    log("Cache saved.")
 
 else:
     docs, embeddings = cached_data
@@ -140,34 +143,43 @@ log("Dependencies loaded.")
 
 embedding_model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
 
-log(f"Initializing UMAP, HDBSCAN, and CountVectorizer...")
-umap_model = UMAP(n_neighbors=15, n_components=5, min_dist=0.0, metric='cosine', random_state=42, n_jobs=1)
-hdbscan_model = HDBSCAN(min_cluster_size=150, metric='euclidean', cluster_selection_method='eom', prediction_data=True, core_dist_n_jobs=1)
+log("Initializing UMAP, and CountVectorizer...")
+umap_model = UMAP(n_neighbors=15, n_components=5, min_dist=0.0, metric='cosine', random_state=42)
 vectorizer_model = CountVectorizer(stop_words="english", min_df=2, ngram_range=(1, 2))
 
-log(f"Fitting BERTopic model...")
+log("Fitting BERTopic model...")
 topic_model = BERTopic(
     embedding_model=embedding_model,
     umap_model=umap_model,
-    hdbscan_model=hdbscan_model,
+    # we use the default HDBSCAN model from BERTopic
     vectorizer_model=vectorizer_model,
-    top_n_words=20,
-    verbose=True
+    top_n_words=5,
+    verbose=True,
+
 )
 
 topics, probs = topic_model.fit_transform(docs, embeddings)
 n_topics = len(set(topics)) - (1 if -1 in topics else 0)
 log(f"BERTopic fitting complete. Found {n_topics} topics.")
 
-log(f"Computing reduced embeddings for visualization...")
+# reduced embeddings for visualization, n_jobs=1 to avoid libomp segfault on macOS ARM64
+log("Computing reduced embeddings for visualization...")
 reduced_embeddings = UMAP(n_neighbors=10, n_components=2, min_dist=0.0, metric='cosine', n_jobs=1).fit_transform(embeddings)
-log(f"Reduced embeddings complete.")
+log("Reduced embeddings complete.")
 
 log(f"Docs: {len(docs)} | Topics: {len(topics)} | Model topics: {len(topic_model.topics_)}")
 
-log(f"Saving results...")
+# save per-document results
+log("Saving results...")
 df = pd.DataFrame({"topic": topics, "document": docs})
 save_path_df = "./output/topic-model-results.csv"
 df.to_csv(save_path_df, index=False, encoding="utf-8")
 log(f"Results saved to {save_path_df}")
-log(f"Done.")
+
+# save topic overview (id, count, name, top words)
+topic_info = topic_model.get_topic_info()
+save_path_topics = "./output/topic-info.csv"
+topic_info.to_csv(save_path_topics, index=False, encoding="utf-8")
+log(f"Topic info saved to {save_path_topics}")
+
+log("Done.")
